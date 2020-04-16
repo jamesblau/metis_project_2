@@ -2,24 +2,11 @@ import os
 import pickle
 from bs4 import BeautifulSoup
 
-fighter_dir = "/home/james/Documents/metis/project_2/www.mixedmartialarts.com/fighter/"
-
-names = os.listdir(fighter_dir)
-
-# names = [
-    # "Paddy-Wieczeorek:7BB273E07EE9621A",
-    # "Dae-Song-Park:F3E386A0A1B74DE2",
-    # "Ted-Kuether:376D2B7B5460D744",
-    # "Syd-Barnier:61312A3124108ADA",
-    # "Aaron-Garcia:C166F408B4C02EB0",
-    # "Anderson-Silva:242FF47B616AC3E5",
-# ]
+fighter_dir = os.path.relpath("./www.mixedmartialarts.com/fighter/")
+fighters_info_dir = os.path.relpath("./fighters_info")
+fighter_names_path = os.path.relpath("./fighter_names")
 
 htmls = {}
-# fighters_info = {}
-fighters_info_dir = "/home/james/Documents/metis/project_2/fighters_info"
-fighter_names_path = "/home/james/Documents/metis/project_2/fighter_names"
-# all_fights = []
 for name in os.listdir(fighter_dir):
     if name.split(':')[0]:
         try:
@@ -69,8 +56,6 @@ for name in os.listdir(fighter_dir):
         if all([key in info for key in ['Height', 'Weight Class', 'Gender']]):
             info['fights'] = fights
             transform_fighter_info(info)
-            # fighters_info[name] = info
-            # all_fights = all_fights + fights
             with open(f"{fighters_info_dir}/{name}", 'wb') as to_write:
                 pickle.dump(info, to_write)
             with open(fighter_names_path, 'a') as names_file:

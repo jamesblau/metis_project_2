@@ -1,3 +1,4 @@
+import os
 import pickle
 import numpy as np
 import pandas as pd
@@ -8,9 +9,7 @@ from sklearn.preprocessing import StandardScaler, PolynomialFeatures
 
 pd.set_option('display.max_columns',100)
 
-project_dir = "/home/james/Documents/metis/project_2/"
-
-with open(project_dir + "second_merged.pickle", 'rb') as to_read:
+with open(os.path.relpath("./pickles/second_merged.pickle"), 'rb') as to_read:
     merged = pickle.load(to_read)
 
 merged['male'] = pd.get_dummies(merged['male'], drop_first=True)

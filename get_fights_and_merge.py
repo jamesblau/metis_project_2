@@ -3,11 +3,9 @@ import pickle
 import pandas as pd
 from tqdm import tqdm as tq
 
-pd.set_option('display.max_columns',100)
+pd.set_option('display.max_columns', None)
 
-project_dir = "/home/james/Documents/metis/project_2/"
-fighters_info_dir = project_dir + "fighters_info"
-fighter_names_path = project_dir + "fighter_names"
+fighters_info_dir = os.path.relpath("./fighters_info")
 
 with open("/home/james/Documents/metis/project_2/fighter_names") as f:
     names = f.read()
