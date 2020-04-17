@@ -102,6 +102,16 @@ def get_past_fights_per_fight(fighter_info):
         transformed_fights = transformed_fights + [(fight, past_fights)]
     return transformed_fights
 
+def get_wins(past_fights):
+    fights = len(past_fights)
+    wins = len([fight for fight in past_fights if fight[4] == 3])
+    return 0 if not fights else wins
+
+def get_losses(past_fights):
+    fights = len(past_fights)
+    losses = len([fight for fight in past_fights if fight[4] == 1])
+    return 0 if not fights else losses
+
 def get_win_rate(past_fights):
     fights = len(past_fights)
     wins = len([fight for fight in past_fights if fight[4] == 3])

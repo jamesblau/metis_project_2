@@ -7,8 +7,8 @@ fighter_dir = "www.mixedmartialarts.com/fighter/"
 for name in os.listdir(fighter_dir):
     if name.split(':')[0]:
         try:
-            with open(fighter_dir + name) as f:
-                html = f.read()
+            with open(fighter_dir + name) as to_read:
+                html = to_read.read()
         except:
             pass
     else:

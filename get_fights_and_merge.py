@@ -5,14 +5,14 @@ from tqdm import tqdm as tq
 
 pd.set_option('display.max_columns', None)
 
-with open("fighter_names"), 'rb') as to_read:
-    names = f.read()
+with open("fighter_names", 'r') as to_read:
+    names = to_read.read()
 splt = names.split('\n')[:-1]
 
 table = []
 for name in tq(splt):
-    with open("fighters_info/" + name, 'rb') as f:
-            fighter_info = pickle.load(f)
+    with open("fighters_info/" + name, 'rb') as to_read:
+            fighter_info = pickle.load(to_read)
     past_fights_per_fight = get_past_fights_per_fight(fighter_info)
     fight_count = len(past_fights_per_fight)
     for fight, past_fights in past_fights_per_fight:
@@ -25,6 +25,8 @@ for name in tq(splt):
                 fighter_info['height'],
                 fighter_info['class'],
                 fighter_info['male'],
+                get_wins(past_fights),
+                get_losses(past_fights),
                 get_win_rate(past_fights),
                 get_loss_rate(past_fights),
                 get_fastest_win(past_fights),
@@ -32,6 +34,7 @@ for name in tq(splt):
                 get_avg_win_time(past_fights),
                 get_avg_loss_time(past_fights),
                 fight[-2],
+                fight[-1],
             ))
         # past_fight_ages_days = get_past_fight_ages_days(fighter_info)
         # past_fight_career_days = get_past_fight_career_days(past_fight_ages_days)
@@ -48,6 +51,8 @@ header = [
     'height',
     'class',
     'male',
+    'wins',
+    'losses',
     'win_rate',
     'loss_rate',
     'fastest_win',
@@ -55,7 +60,19 @@ header = [
     'avg_win_time',
     'avg_loss_time',
     'time',
+    'outcome',
 ]
+
+# losses = sum(df[df['outcome'] == 1]['outcome'])
+
+# wins = sum(df[df['outcome'] == 3]['outcome'])
+
+# q = pd.DataFrame({'outcomes': [losses, wins]})
+# z = pd.DataFrame({'losses': [losses], 'wins': [wins]})
+
+# q.hist()
+
+# z.hist()
 
 table_in_lists = [list(tup) for tup in table]
 
@@ -138,7 +155,7 @@ del merged['avg_win_time']
 del merged['avg_win_time_2']
 del merged['avg_loss_time']
 del merged['avg_loss_time_2']
-merged = merged.replace('0', np.NaN).dropna()
+merged = merged.replace(0, np.NaN).dropna()
 
 # with open("pickles/second_merged.pickle", 'wb') as to_write:
     # pickle.dump(merged, to_write)
