@@ -1,7 +1,6 @@
 import re
 from dateutil.relativedelta import relativedelta
 
-date_regex = re.compile(r'^\d\d/\d\d/\d\d\d\d')
 record_regex = re.compile(r'^(\d*)-(\d*)-(\d*).*')
 height_regex = re.compile(r'^(\d*)\' (\d*)"')
 years_months_days_regex = \

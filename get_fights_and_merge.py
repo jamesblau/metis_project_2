@@ -5,15 +5,13 @@ from tqdm import tqdm as tq
 
 pd.set_option('display.max_columns', None)
 
-fighters_info_dir = os.path.relpath("./fighters_info")
-
-with open("/home/james/Documents/metis/project_2/fighter_names") as f:
+with open("fighter_names"), 'rb') as to_read:
     names = f.read()
 splt = names.split('\n')[:-1]
 
 table = []
 for name in tq(splt):
-    with open(f"{fighters_info_dir}/{name}", 'rb') as f:
+    with open("fighters_info/" + name, 'rb') as f:
             fighter_info = pickle.load(f)
     past_fights_per_fight = get_past_fights_per_fight(fighter_info)
     fight_count = len(past_fights_per_fight)
@@ -63,10 +61,10 @@ table_in_lists = [list(tup) for tup in table]
 
 df = pd.DataFrame(table_in_lists, columns=header)
 
-# with open(f"/home/james/Documents/metis/project_2/second_dataframe.pickle", 'wb') as to_write:
+# with open("pickles/second_dataframe.pickle", 'wb') as to_write:
     # pickle.dump(df, to_write)
 
-with open(project_dir + "second_dataframe.pickle", 'rb') as to_read:
+with open("pickles/second_dataframe.pickle", 'rb') as to_read:
     df = pickle.load(to_read)
 
 # small = df.iloc[0:500]
@@ -142,5 +140,5 @@ del merged['avg_loss_time']
 del merged['avg_loss_time_2']
 merged = merged.replace('0', np.NaN).dropna()
 
-# with open(f"/home/james/Documents/metis/project_2/second_merged.pickle", 'wb') as to_write:
+# with open("pickles/second_merged.pickle", 'wb') as to_write:
     # pickle.dump(merged, to_write)

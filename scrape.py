@@ -2,11 +2,8 @@ import os
 import pickle
 from bs4 import BeautifulSoup
 
-fighter_dir = os.path.relpath("./www.mixedmartialarts.com/fighter/")
-fighters_info_dir = os.path.relpath("./fighters_info")
-fighter_names_path = os.path.relpath("./fighter_names")
+fighter_dir = "www.mixedmartialarts.com/fighter/"
 
-htmls = {}
 for name in os.listdir(fighter_dir):
     if name.split(':')[0]:
         try:
@@ -56,7 +53,7 @@ for name in os.listdir(fighter_dir):
         if all([key in info for key in ['Height', 'Weight Class', 'Gender']]):
             info['fights'] = fights
             transform_fighter_info(info)
-            with open(f"{fighters_info_dir}/{name}", 'wb') as to_write:
+            with open("fighters_info/" + name, 'wb') as to_write:
                 pickle.dump(info, to_write)
-            with open(fighter_names_path, 'a') as names_file:
+            with open("fighter_names", 'a') as names_file:
                 names_file.write(name + '\n')

@@ -9,7 +9,7 @@ from sklearn.preprocessing import StandardScaler, PolynomialFeatures
 
 pd.set_option('display.max_columns',100)
 
-with open(os.path.relpath("./pickles/second_merged.pickle"), 'rb') as to_read:
+with open("pickles/second_merged.pickle", 'rb') as to_read:
     merged = pickle.load(to_read)
 
 merged['male'] = pd.get_dummies(merged['male'], drop_first=True)
@@ -45,6 +45,8 @@ balanced_men = pd.concat([df for quantile, df in men_by_quantile.items()])
 balanced_women = pd.concat([df for quantile, df in women_by_quantile.items()])
 
 balanced = pd.concat([balanced_men, balanced_women])
+
+balanced.columns
 
 sns.boxplot(merged['fight_count_sum'])
 
