@@ -1,5 +1,7 @@
 import re
 
+# These functions are used in scrape.py
+
 height_regex = re.compile(r'^(\d*)\' (\d*)"')
 def height_inches(string):
     match = height_regex.search(string)

@@ -5,18 +5,24 @@ from tqdm import tqdm as tq
 
 pd.set_option('display.max_columns', None)
 
+# We're going to filter out fights against opponents not in our list
+#   of fighters for whom we have enough data
 with open("fighter_names", 'r') as to_read:
     names = to_read.read()
 splt = names.split('\n')[:-1]
 
 table = []
+# Open each fighter's data
 for name in tq(splt):
     with open("fighters_info/" + name, 'rb') as to_read:
             fighter_info = pickle.load(to_read)
+    # Aggregate previous fights
     past_fights_per_fight = get_past_fights_per_fight(fighter_info)
     fight_count = len(past_fights_per_fight)
     for fight, past_fights in past_fights_per_fight:
+        # Remove fights against opponents not in our list
         if fight[1] in splt:
+            # Generate features
             table.append((
                 name,
                 fight[1],
@@ -31,7 +37,6 @@ for name in tq(splt):
                 get_avg_win_time(past_fights),
                 get_avg_loss_time(past_fights),
                 fight[-2],
-                fight[-1],
             ))
 header = [
     'f1',
@@ -47,21 +52,28 @@ header = [
     'avg_win_time',
     'avg_loss_time',
     'time',
-    'outcome',
 ]
 
 table_in_lists = [list(tup) for tup in table]
 
 df = pd.DataFrame(table_in_lists, columns=header)
 
+# I commented this out to avoid stomping on the pickle
 # with open("pickles/dataframe.pickle", 'wb') as to_write:
     # pickle.dump(df, to_write)
 
+# And repeatedly reloaded from this point
 with open("pickles/dataframe.pickle", 'rb') as to_read:
     df = pickle.load(to_read)
 
+# This didn't need to be a deep copy, but I get paranoid
+# Anyway we're keeping on one hand our list of fights
+#   (with data for only one fighter)
 fights = df.copy(deep=True)
 
+# And on the other hand we get a unique list of fighters
+# Which we'll join in to the list of fights
+#   (so we have data for both fighters for each fight)
 fighters = df.copy(deep=True)
 del fighters['f2']
 del fighters['time']
@@ -78,7 +90,6 @@ fighters.rename(columns = {
     'avg_win_time': 'avg_win_time_2',
     'avg_loss_time': 'avg_loss_time_2',
 }, inplace=True)
-
 fighters = fighters\
     .groupby(['f2'])\
     .agg({
@@ -94,7 +105,11 @@ fighters = fighters\
     })\
     .reset_index()
 
+# Join the two dataframes, for our final list of fights
 merged = fights.merge(fighters, how='inner', on='f2')
+
+# Generate sum and difference columns of relevant features
+#   (so that inputs are symmetrical with respect to both input fighters)
 merged['fight_count_dif'] = abs(merged['fight_count'] - merged['fight_count_2'])
 merged['fight_count_sum'] = merged['fight_count'] + merged['fight_count_2']
 merged['height_dif'] = abs(merged['height'] - merged['height_2'])
@@ -111,6 +126,8 @@ merged['avg_win_time_dif'] = abs(merged['avg_win_time'] - merged['avg_win_time_2
 merged['avg_win_time_sum'] = merged['avg_win_time'] + merged['avg_win_time_2']
 merged['avg_loss_time_dif'] = abs(merged['avg_loss_time'] - merged['avg_loss_time_2'])
 merged['avg_loss_time_sum'] = merged['avg_loss_time'] + merged['avg_loss_time_2']
+
+# Drop columns that won't be features
 del merged['f1']
 del merged['f2']
 del merged['class_2']
@@ -126,7 +143,12 @@ del merged['avg_win_time']
 del merged['avg_win_time_2']
 del merged['avg_loss_time']
 del merged['avg_loss_time_2']
+
+# Remove rows that are missing even a single feature
+#   (we have plenty)
 merged = merged.replace(0, np.NaN).dropna()
 
+# Again, this is commented out to avoid stomping on the pickle
+#   which I repeatedly loaded during EDA/regression
 # with open("pickles/merged.pickle", 'wb') as to_write:
     # pickle.dump(merged, to_write)

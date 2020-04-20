@@ -1,3 +1,5 @@
+# These functions are used in get_fights_and_merge.py
+
 def get_past_fights_per_fight(fighter_info):
     """
     Takes in a fighter_info dict, which contains a bunch of stats,
