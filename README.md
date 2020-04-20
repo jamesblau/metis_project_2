@@ -10,7 +10,7 @@ I grabbed the raw html (and a bunch of other stuff I didn't need) using `wget`:
 wget -r -l0 www.mixedmartialarts.com/fighter/
 ```
 
-I didn't make this into an executable script because it took a while to download all of the data (I left it running for more that 24 hours, although I'm not sure what the minimum time would have grabbed enough data), and I figured you wouldn't want to do that. The reason it required so much data is that the fighter pages come in no particular order, and getting complete data for a fight requires getting data from the fighter page of both fighters; the result was that I grabbed lots of data and then filtered it down later.
+I didn't make this into an executable script because it took a while to download all of the data (I left it running for more than 24 hours, although I'm not sure what the minimum time would have been to grab enough data), and I figured you wouldn't want to do that. The reason it required so much data is that the fighter pages came in no particular order, and getting complete data for a fight required getting data from the fighter page of both fighters; the result was that I grabbed lots of data and then filtered it down later.
 
 Python files:
 
@@ -32,6 +32,6 @@ Python files:
 - `regress.py`
   - performs regression, generating stats and plots
 
-I removed all the parts that eventually got dropped, including the postdiction features I cleaned before coming to my senses and some features I didn't quite manage to bugfix in time.
+I removed all the parts that eventually got dropped, including the code for cleaning postdiction features, which I wrote before coming to my senses, and code for generating features that I didn't quite manage to bugfix in time.
 
 Cheers!
