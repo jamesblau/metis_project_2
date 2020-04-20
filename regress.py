@@ -101,7 +101,7 @@ X_train_val, X_test, y_train_val, y_test = \
 X_train, X_val, y_train, y_val = \
         train_test_split(X_train_val, y_train_val, test_size=.25, random_state=43)
 
-## Scale the data
+# Scale the data
 std = StandardScaler()
 std.fit(X_train.values)
 X_tr = std.transform(X_train.values)
