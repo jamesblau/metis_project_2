@@ -16,7 +16,6 @@ for name in tq(splt):
     past_fights_per_fight = get_past_fights_per_fight(fighter_info)
     fight_count = len(past_fights_per_fight)
     for fight, past_fights in past_fights_per_fight:
-        # print(fight)
         if fight[1] in splt:
             table.append((
                 name,
@@ -25,8 +24,6 @@ for name in tq(splt):
                 fighter_info['height'],
                 fighter_info['class'],
                 fighter_info['male'],
-                get_wins(past_fights),
-                get_losses(past_fights),
                 get_win_rate(past_fights),
                 get_loss_rate(past_fights),
                 get_fastest_win(past_fights),
@@ -36,14 +33,6 @@ for name in tq(splt):
                 fight[-2],
                 fight[-1],
             ))
-        # past_fight_ages_days = get_past_fight_ages_days(fighter_info)
-        # past_fight_career_days = get_past_fight_career_days(past_fight_ages_days)
-            # [print(past_fight, '\n') for past_fight in past_fights]
-            # print(name)
-table
-
-len(table)
-
 header = [
     'f1',
     'f2',
@@ -51,8 +40,6 @@ header = [
     'height',
     'class',
     'male',
-    'wins',
-    'losses',
     'win_rate',
     'loss_rate',
     'fastest_win',
@@ -63,29 +50,15 @@ header = [
     'outcome',
 ]
 
-# losses = sum(df[df['outcome'] == 1]['outcome'])
-
-# wins = sum(df[df['outcome'] == 3]['outcome'])
-
-# q = pd.DataFrame({'outcomes': [losses, wins]})
-# z = pd.DataFrame({'losses': [losses], 'wins': [wins]})
-
-# q.hist()
-
-# z.hist()
-
 table_in_lists = [list(tup) for tup in table]
 
 df = pd.DataFrame(table_in_lists, columns=header)
 
-# with open("pickles/second_dataframe.pickle", 'wb') as to_write:
+# with open("pickles/dataframe.pickle", 'wb') as to_write:
     # pickle.dump(df, to_write)
 
-with open("pickles/second_dataframe.pickle", 'rb') as to_read:
+with open("pickles/dataframe.pickle", 'rb') as to_read:
     df = pickle.load(to_read)
-
-# small = df.iloc[0:500]
-# small2 = df.iloc[0:500]
 
 fights = df.copy(deep=True)
 
@@ -121,8 +94,6 @@ fighters = fighters\
     })\
     .reset_index()
 
-fights.columns, fighters.columns
-
 merged = fights.merge(fighters, how='inner', on='f2')
 merged['fight_count_dif'] = abs(merged['fight_count'] - merged['fight_count_2'])
 merged['fight_count_sum'] = merged['fight_count'] + merged['fight_count_2']
@@ -157,5 +128,5 @@ del merged['avg_loss_time']
 del merged['avg_loss_time_2']
 merged = merged.replace(0, np.NaN).dropna()
 
-# with open("pickles/second_merged.pickle", 'wb') as to_write:
+# with open("pickles/merged.pickle", 'wb') as to_write:
     # pickle.dump(merged, to_write)
