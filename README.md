@@ -32,4 +32,6 @@ Python files:
 - `regress.py`
   - performs regression, generating stats and plots
 
+I removed all the parts that eventually got dropped, including the postdiction features I cleaned before coming to my senses and some features I didn't quite manage to bugfix in time.
+
 Cheers!
